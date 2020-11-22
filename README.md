@@ -12,6 +12,7 @@
 ## Usage
 
 ```bash
+export GO111MODULE=on
 go get github.com/mchirico/go.etcd
 ```
 
@@ -20,7 +21,8 @@ go get github.com/mchirico/go.etcd
 package main
 
 import (
-	"github.com/mchirico/go-etcd/pkg/etcdutils"
+	"github.com/mchirico/go.etcd/pkg/etcdutils"
+	"log"
 	"time"
 )
 
@@ -39,13 +41,14 @@ func main() {
 	result, _ := e.GetWithPrefix("/testing/")
 
 	if len(result.Kvs) != 2 {
-		t.Fatalf("Number of keys: %d\n", len(result.Kvs))
+		log.Printf("Number of keys: %d\n", len(result.Kvs))
 	}
 
 	for i, v := range result.Kvs {
-		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
+		log.Printf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
 	}
 }
+
 
 
 ```

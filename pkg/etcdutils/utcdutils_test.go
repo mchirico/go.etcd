@@ -6,7 +6,7 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	e := NewETC("../../certs")
+	e := NewETC()
 
 	r := e.EtcdRun()
 	fmt.Println(r)

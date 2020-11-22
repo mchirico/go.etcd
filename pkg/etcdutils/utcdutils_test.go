@@ -13,8 +13,8 @@ import (
 //}
 
 func TestETC_Put(t *testing.T) {
-	e := NewETC()
-	defer e.Cancel()
+	e, cancel := NewETC()
+	defer cancel()
 
 	e.DeleteWithPrefix("/testing")
 
@@ -29,8 +29,9 @@ func TestETC_Put(t *testing.T) {
 }
 
 func TestETC_Delete(t *testing.T) {
-	e := NewETC()
-	defer e.Cancel()
+	e, cancel := NewETC()
+	defer cancel()
+
 	e.DeleteWithPrefix("/testing")
 
 	now := time.Now()
@@ -48,8 +49,8 @@ func TestETC_Delete(t *testing.T) {
 }
 
 func TestETC_GetWithPrefix(t *testing.T) {
-	e := NewETC()
-	defer e.Cancel()
+	e, cancel := NewETC()
+	defer cancel()
 
 	e.DeleteWithPrefix("/testing")
 

@@ -26,7 +26,7 @@ type ETC struct {
 	err      error
 }
 
-func NewETC(certsDir ...string) ETC {
+func NewETC(certsDir ...string) (ETC, func()) {
 	e := ETC{}
 	if certsDir == nil {
 		e.CertsDir = "/certs"
@@ -36,7 +36,7 @@ func NewETC(certsDir ...string) ETC {
 
 	e.ctx, e.cancel, e.cli, e.kv, e.err = e.setup()
 
-	return e
+	return e, e.cancel
 }
 
 func (e ETC) Cancel() {

@@ -19,6 +19,11 @@ var (
 
 type ETC struct {
 	CertsDir string
+	ctx      context.Context
+	cancel   context.CancelFunc
+	cli      *clientv3.Client
+	kv       clientv3.KV
+	err      error
 }
 
 func NewETC(certsDir ...string) ETC {
@@ -29,7 +34,14 @@ func NewETC(certsDir ...string) ETC {
 		e.CertsDir = certsDir[0]
 	}
 
+	e.ctx, e.cancel, e.cli, e.kv, e.err = e.setup()
+
 	return e
+}
+
+func (e ETC) Cancel() {
+	e.cancel()
+	e.cli.Close()
 }
 
 func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
@@ -64,79 +76,33 @@ func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, cli
 }
 
 func (e ETC) Put(key string, value string) (*clientv3.PutResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	pr, err := kv.Put(ctx, key, value)
+	pr, err := e.kv.Put(e.ctx, key, value)
 	return pr, err
 }
 
 func (e ETC) PutWithLease(key string, value string, ttl int64) (*clientv3.PutResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	lease, err := cli.Grant(ctx, ttl)
-	pr, err := kv.Put(ctx, key, value, clientv3.WithLease(lease.ID))
-
+	lease, err := e.cli.Grant(e.ctx, ttl)
+	pr, err := e.kv.Put(e.ctx, key, value, clientv3.WithLease(lease.ID))
 	return pr, err
 }
 
 func (e ETC) Get(key string) (*clientv3.GetResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	gr, err := kv.Get(ctx, key)
-
+	gr, err := e.kv.Get(e.ctx, key)
 	return gr, err
 }
 
 func (e ETC) GetWithPrefix(key string) (*clientv3.GetResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	gr, err := kv.Get(ctx, key, clientv3.WithPrefix())
-
+	gr, err := e.kv.Get(e.ctx, key, clientv3.WithPrefix())
 	return gr, err
 }
 
 func (e ETC) DeleteWithPrefix(key string) (*clientv3.DeleteResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	dr, err := kv.Delete(ctx, key, clientv3.WithPrefix())
+	dr, err := e.kv.Delete(e.ctx, key, clientv3.WithPrefix())
 	return dr, err
-
 }
 
 func (e ETC) Delete(key string) (*clientv3.DeleteResponse, error) {
-	ctx, cancel, cli, kv, err := e.setup()
-	if err != nil {
-		return nil, err
-	}
-	defer cancel()
-	defer cli.Close()
-
-	dr, err := kv.Delete(ctx, key)
+	dr, err := e.kv.Delete(e.ctx, key)
 	return dr, err
 
 }

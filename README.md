@@ -50,7 +50,7 @@ func main() {
 ```
 Next version:
 
-git tag -fa v0.0.5 -m "Adding Txn"
+git tag -fa v0.0.5 -m "Put changes here."
 git push origin v0.0.5 --force
 
 ```

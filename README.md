@@ -10,42 +10,10 @@
 # go.etcd
 
 
-
-### Checklist:
-
-1. dockerPassword
-2. [CodeCov Token](https://codecov.io/gh/mchirico)
-3. No Caps in project
-4. MONGO_CONNECTION_STRING
-5. MONGO_DATABASE 
-6. Make Azure Boards Public
-7. More Cobra commands? (cobra add say)
-
-
-
-## Build with vendor
 ```
-export GO111MODULE=on
-go mod init
-# Below will put all packages in a vendor folder
-go mod vendor
+Next version:
 
-
-
-go test -v -mod=vendor ./...
-
-# Don't forget the "." in "./cmd/script" below
-go build -v -mod=vendor ./...
-```
-
-
-## Don't forget golint
+git tag -fa v0.0.2 -m "first version"
+git push origin v0.0.2 --force
 
 ```
-
-golint -set_exit_status $(go list ./... | grep -v /vendor/)
-
-```
-
-
-# go.etcd

@@ -35,7 +35,7 @@ func TestETC_GetWithPrefix(t *testing.T) {
 	now := time.Now()
 
 	e.Put("/testing/TestETC_Put", now.String())
-	e.Put("/testing/a", now.String())
+	e.PutWithLease("/testing/a", now.String(), 3)
 
 	result, _ := e.GetWithPrefix("/testing/")
 
@@ -44,7 +44,7 @@ func TestETC_GetWithPrefix(t *testing.T) {
 	}
 
 	for i, v := range result.Kvs {
-		t.Logf("result.Kvs[%d]: %s, ver: %d\n", i, v.Value, v.Version)
+		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
 	}
 
 }

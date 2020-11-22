@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mchirico/go-etcd/pkg/etcdutils"
+	"github.com/mchirico/go.etcd/pkg/etcdutils"
 	"log"
 	"time"
 )

@@ -46,7 +46,7 @@ func (e ETC) Cancel() {
 
 func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
-	//defer cancel()
+
 
 	cert, err := tls.LoadX509KeyPair(e.CertsDir+"/client.pem", e.CertsDir+"/client-key.pem")
 	caCert, err := ioutil.ReadFile(e.CertsDir + "/ca.pem")
@@ -69,9 +69,8 @@ func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, cli
 
 		TLS: tlsConfig,
 	})
-	//defer cli.Close()
-	kv := clientv3.NewKV(cli)
 
+	kv := clientv3.NewKV(cli)
 	return ctx, cancel, cli, kv, err
 }
 
@@ -106,6 +105,13 @@ func (e ETC) Delete(key string) (*clientv3.DeleteResponse, error) {
 	return dr, err
 
 }
+
+func (e ETC)Txn() clientv3.Txn {
+
+		tx := e.kv.Txn(e.ctx)
+		return tx
+}
+
 
 // "../../certs/client.pem"
 func (e ETC) EtcdRun() string {

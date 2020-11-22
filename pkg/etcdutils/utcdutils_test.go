@@ -1,16 +1,12 @@
 package etcdutils
 
 import (
+	"fmt"
 	"testing"
 	"time"
+	"github.com/etcd-io/etcd/clientv3"
 )
 
-//func TestRun(t *testing.T) {
-//	e := NewETC()
-//
-//	r := e.EtcdRun()
-//	fmt.Println(r)
-//}
 
 func TestETC_Put(t *testing.T) {
 	e, cancel := NewETC()
@@ -68,5 +64,35 @@ func TestETC_GetWithPrefix(t *testing.T) {
 	for i, v := range result.Kvs {
 		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
 	}
+
+}
+
+
+/*
+For this you neeed:
+    "github.com/etcd-io/etcd/clientv3"
+ */
+func TestETC_Txn(t *testing.T) {
+	e, cancel := NewETC()
+	defer cancel()
+
+	tx := e.Txn()
+
+	txresp, err := tx.If(
+		clientv3.Compare(clientv3.Value("foo"), "=", "bar"),
+	).Then(
+		clientv3.OpPut("foo", "sanfoo"), clientv3.OpPut("newfoo", "newbar"),
+	).Else(
+		clientv3.OpPut("foo", "bar"), clientv3.OpDelete("newfoo"),
+	).Commit()
+	fmt.Println(txresp, err)
+
+	result,_ := e.Get("foo")
+	for i, v := range result.Kvs {
+		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
+	}
+
+
+
 
 }

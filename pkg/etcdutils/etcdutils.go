@@ -75,8 +75,6 @@ func (e ETC) Put(key string, value string) (*clientv3.PutResponse, error) {
 	return pr, err
 }
 
-
-
 func (e ETC) PutWithLease(key string, value string, ttl int64) (*clientv3.PutResponse, error) {
 	ctx, cancel, cli, kv, err := e.setup()
 	if err != nil {
@@ -86,12 +84,10 @@ func (e ETC) PutWithLease(key string, value string, ttl int64) (*clientv3.PutRes
 	defer cli.Close()
 
 	lease, err := cli.Grant(ctx, ttl)
-	pr,err := kv.Put(ctx, key, value, clientv3.WithLease(lease.ID))
-
+	pr, err := kv.Put(ctx, key, value, clientv3.WithLease(lease.ID))
 
 	return pr, err
 }
-
 
 func (e ETC) Get(key string) (*clientv3.GetResponse, error) {
 	ctx, cancel, cli, kv, err := e.setup()
@@ -127,7 +123,7 @@ func (e ETC) DeleteWithPrefix(key string) (*clientv3.DeleteResponse, error) {
 	defer cancel()
 	defer cli.Close()
 
-	dr, err := kv.Delete(ctx, "key", clientv3.WithPrefix())
+	dr, err := kv.Delete(ctx, key, clientv3.WithPrefix())
 	return dr, err
 
 }
@@ -140,7 +136,7 @@ func (e ETC) Delete(key string) (*clientv3.DeleteResponse, error) {
 	defer cancel()
 	defer cli.Close()
 
-	dr, err := kv.Delete(ctx, "key")
+	dr, err := kv.Delete(ctx, key)
 	return dr, err
 
 }

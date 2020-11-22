@@ -34,13 +34,13 @@ func TestETC_GetWithPrefix(t *testing.T) {
 
 	now := time.Now()
 
-	e.Put("/testing/TestETC_Put", now.String())
+	e.Put("/testing/TestETC_Put ... more", now.String())
 	e.PutWithLease("/testing/a", now.String(), 3)
 
 	result, _ := e.GetWithPrefix("/testing/")
 
 	if len(result.Kvs) != 2 {
-		t.Fatalf("Can't get keys")
+		t.Fatalf("Number of keys: %d\n", len(result.Kvs))
 	}
 
 	for i, v := range result.Kvs {

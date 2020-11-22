@@ -1,17 +1,16 @@
 package etcdutils
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
 
-func TestRun(t *testing.T) {
-	e := NewETC()
-
-	r := e.EtcdRun()
-	fmt.Println(r)
-}
+//func TestRun(t *testing.T) {
+//	e := NewETC()
+//
+//	r := e.EtcdRun()
+//	fmt.Println(r)
+//}
 
 func TestETC_Put(t *testing.T) {
 	e := NewETC()

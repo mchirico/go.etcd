@@ -1,30 +1,22 @@
+/*
+Copyright © 2020 Mike Chirico <mchirico@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package main
 
-import (
-	"github.com/mchirico/go.etcd/pkg/etcdutils"
-	"log"
-	"time"
-)
+import "github.com/mchirico/go.etcd/cmd"
 
 func main() {
-
-	e, cancel := etcdutils.NewETC()
-	defer cancel()
-
-	e.DeleteWithPrefix("/testing")
-
-	now := time.Now()
-
-	e.Put("/testing/TestETC_Put ... more", now.String())
-	e.PutWithLease("/testing/a", now.String(), 3)
-
-	result, _ := e.GetWithPrefix("/testing/")
-
-	if len(result.Kvs) != 2 {
-		log.Printf("Number of keys: %d\n", len(result.Kvs))
-	}
-
-	for i, v := range result.Kvs {
-		log.Printf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
-	}
+  cmd.Execute()
 }

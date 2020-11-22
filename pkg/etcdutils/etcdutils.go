@@ -32,6 +32,62 @@ func NewETC(certsDir ...string) ETC {
 	return e
 }
 
+func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
+	//defer cancel()
+
+	cert, err := tls.LoadX509KeyPair(e.CertsDir+"/client.pem", e.CertsDir+"/client-key.pem")
+	caCert, err := ioutil.ReadFile(e.CertsDir + "/ca.pem")
+	caCertPool := x509.NewCertPool()
+
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	tlsConfig := &tls.Config{
+		Certificates: []tls.Certificate{cert},
+		RootCAs:      caCertPool,
+	}
+
+	cli, err := clientv3.New(clientv3.Config{
+		DialTimeout: dialTimeout,
+		Endpoints:   []string{"etcd.cwxstat.io:2379"},
+
+		TLS: tlsConfig,
+	})
+	//defer cli.Close()
+	kv := clientv3.NewKV(cli)
+
+	return ctx, cancel, cli, kv, err
+}
+
+func (e ETC) Put(key string, value string) (*clientv3.PutResponse, error) {
+	ctx, cancel, cli, kv, err := e.setup()
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+	defer cli.Close()
+
+	pr, err := kv.Put(ctx, key, value)
+	return pr, err
+}
+
+func (e ETC) Get(key string) (*clientv3.GetResponse, error) {
+	ctx, cancel, cli, kv, err := e.setup()
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+	defer cli.Close()
+
+	gr, err := kv.Get(ctx, key)
+
+	return gr, err
+}
+
 // "../../certs/client.pem"
 func (e ETC) EtcdRun() string {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)

@@ -88,6 +88,45 @@ func (e ETC) Get(key string) (*clientv3.GetResponse, error) {
 	return gr, err
 }
 
+func (e ETC) GetWithPrefix(key string) (*clientv3.GetResponse, error) {
+	ctx, cancel, cli, kv, err := e.setup()
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+	defer cli.Close()
+
+	gr, err := kv.Get(ctx, key, clientv3.WithPrefix())
+
+	return gr, err
+}
+
+func (e ETC) DeleteWithPrefix(key string) (*clientv3.DeleteResponse, error) {
+	ctx, cancel, cli, kv, err := e.setup()
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+	defer cli.Close()
+
+	dr, err := kv.Delete(ctx, "key", clientv3.WithPrefix())
+	return dr, err
+
+}
+
+func (e ETC) Delete(key string) (*clientv3.DeleteResponse, error) {
+	ctx, cancel, cli, kv, err := e.setup()
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+	defer cli.Close()
+
+	dr, err := kv.Delete(ctx, "key")
+	return dr, err
+
+}
+
 // "../../certs/client.pem"
 func (e ETC) EtcdRun() string {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)

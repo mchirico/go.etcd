@@ -8,6 +8,7 @@
 ```bash
 export GO111MODULE=on
 go get github.com/mchirico/go.etcd
+go get github.com/etcd-io/etcd 
 
 
 ```

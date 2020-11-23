@@ -24,11 +24,11 @@ jobs:
 
     - name: cfssl
       run: |
-        wget https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl-bundle_1.5.0_linux_amd64
+        wget https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl_1.5.0_linux_amd64
         wget https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssljson_1.5.0_linux_amd64
         chmod +x cfssljson_1.5.0_linux_amd64
-        chmod +x cfssl-bundle_1.5.0_linux_amd64
-        sudo mv cfssl-bundle_1.5.0_linux_amd64 /usr/local/bin/cfssl 
+        chmod +x cfssl_1.5.0_linux_amd64
+        sudo mv cfssl_1.5.0_linux_amd64 /usr/local/bin/cfssl 
         sudo mv cfssljson_1.5.0_linux_amd64 /usr/local/bin/cfssljson
         
       

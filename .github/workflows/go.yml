@@ -24,7 +24,8 @@ jobs:
 
     - name: cfssl
       run: |
-        GO111MODULE="on" go get -u github.com/cloudflare/cfssl/cmd/cfssl
+        wget https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl-bundle_1.5.0_linux_amd64
+        sudo mv cfssl-bundle_1.5.0_linux_amd64 /usr/local/bin/cfssl 
         cfssl
       
 

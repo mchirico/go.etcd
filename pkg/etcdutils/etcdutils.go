@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"github.com/etcd-io/etcd/clientv3"
+	"github.com/mchirico/go.etcd/pkg/settings"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -28,13 +29,24 @@ type ETC struct {
 
 func NewETC(certsDir ...string) (ETC, func()) {
 	e := ETC{}
+	config, err := settings.ReadConfig()
+	if err != nil {
+		log.Printf("You need a config. CREATING!")
+		settings.CreateDefault()
+		config, err = settings.ReadConfig()
+		if err != nil {
+			log.Fatalf("NewETC: Can't read or create config\n")
+		}
+	}
+
 	if certsDir == nil {
-		e.CertsDir = "/certs"
+		e.CertsDir = config.Certs.Directory
 	} else {
 		e.CertsDir = certsDir[0]
 	}
 
-	e.ctx, e.cancel, e.cli, e.kv, e.err = e.setup()
+	e.ctx, e.cancel, e.cli, e.kv, e.err = e.setup(config.Certs.Client,
+		config.Certs.ClientKey, config.Certs.Ca)
 
 	return e, e.cancel
 }
@@ -44,12 +56,11 @@ func (e ETC) Cancel() {
 	e.cli.Close()
 }
 
-func (e ETC) setup() (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
+func (e ETC) setup(client, clientKey, ca string) (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
 
-
-	cert, err := tls.LoadX509KeyPair(e.CertsDir+"/client.pem", e.CertsDir+"/client-key.pem")
-	caCert, err := ioutil.ReadFile(e.CertsDir + "/ca.pem")
+	cert, err := tls.LoadX509KeyPair(e.CertsDir+"/"+client, e.CertsDir+"/"+clientKey)
+	caCert, err := ioutil.ReadFile(e.CertsDir + "/" + ca)
 	caCertPool := x509.NewCertPool()
 
 	if err != nil {
@@ -106,12 +117,11 @@ func (e ETC) Delete(key string) (*clientv3.DeleteResponse, error) {
 
 }
 
-func (e ETC)Txn() clientv3.Txn {
+func (e ETC) Txn() clientv3.Txn {
 
-		tx := e.kv.Txn(e.ctx)
-		return tx
+	tx := e.kv.Txn(e.ctx)
+	return tx
 }
-
 
 // "../../certs/client.pem"
 func (e ETC) EtcdRun() string {

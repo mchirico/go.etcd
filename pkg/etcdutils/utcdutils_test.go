@@ -2,11 +2,10 @@ package etcdutils
 
 import (
 	"fmt"
+	"github.com/etcd-io/etcd/clientv3"
 	"testing"
 	"time"
-	"github.com/etcd-io/etcd/clientv3"
 )
-
 
 func TestETC_Put(t *testing.T) {
 	e, cancel := NewETC()
@@ -67,11 +66,10 @@ func TestETC_GetWithPrefix(t *testing.T) {
 
 }
 
-
 /*
 For this you neeed:
     "github.com/etcd-io/etcd/clientv3"
- */
+*/
 func TestETC_Txn(t *testing.T) {
 	e, cancel := NewETC()
 	defer cancel()
@@ -87,12 +85,9 @@ func TestETC_Txn(t *testing.T) {
 	).Commit()
 	fmt.Println(txresp, err)
 
-	result,_ := e.Get("foo")
+	result, _ := e.Get("foo")
 	for i, v := range result.Kvs {
 		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
 	}
-
-
-
 
 }

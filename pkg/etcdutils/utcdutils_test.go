@@ -135,7 +135,6 @@ func DoTxn(e ETC) {
 	//fmt.Println(txresp, err)
 }
 
-
 func TestETC_Page(t *testing.T) {
 	e, cancel := NewETC("test")
 	defer cancel()
@@ -144,7 +143,7 @@ func TestETC_Page(t *testing.T) {
 
 	for i := 0; i < 20; i++ {
 		k := fmt.Sprintf("key_%02d", i)
-		e.Put(k,strconv.Itoa(i))
+		e.Put(k, strconv.Itoa(i))
 	}
 
 	var number int64 = 3
@@ -154,7 +153,7 @@ func TestETC_Page(t *testing.T) {
 		clientv3.WithLimit(number),
 	}
 
-	gr, _ := e.Get("key",opts...)
+	gr, _ := e.Get("key", opts...)
 	fmt.Println("--- First page ---")
 	for _, item := range gr.Kvs {
 		fmt.Println(string(item.Key), string(item.Value))
@@ -163,7 +162,7 @@ func TestETC_Page(t *testing.T) {
 	lastKey := string(gr.Kvs[len(gr.Kvs)-1].Key)
 
 	fmt.Println("--- Second page ---")
-	opts[2] = clientv3.WithLimit(number+1)
+	opts[2] = clientv3.WithLimit(number + 1)
 	opts = append(opts, clientv3.WithFromKey())
 	gr, _ = e.Get(lastKey, opts...)
 
@@ -171,6 +170,5 @@ func TestETC_Page(t *testing.T) {
 	for _, item := range gr.Kvs[1:] {
 		fmt.Println(string(item.Key), string(item.Value))
 	}
-
 
 }

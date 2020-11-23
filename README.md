@@ -56,7 +56,8 @@ func main() {
 ```
 Next version:
 
-git tag -fa v0.0.11 -m "Describe what you did"
-git push origin v0.0.11 --force
+git tag -fa v0.0.12 -m "Describe what you did"
+git push origin v0.0.12 --force
+
 
 ```

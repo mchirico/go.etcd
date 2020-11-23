@@ -65,9 +65,7 @@ jobs:
     - name: Test
       run: go test -race -v -coverprofile=coverage.txt ./...
 
-    - name: Make
-      run: make
-
+  
     - name: Codecov Setup
       uses: codecov/codecov-action@v1
       with:

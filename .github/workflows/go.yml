@@ -42,6 +42,22 @@ jobs:
     - name: Build
       run: go build -v ./...
 
+    - name: certs
+      run: |
+        cd certs && ./run.sh
+        cd ./..
+        sudo cp -r certs /certs
+
+
+    - name: run etcd
+      run: |
+        docker run -d \
+           -it \
+           --name etcd \
+           -p 2379:2379 \
+           -v /certs:/certs \
+           quay.io/mchirico/etcd:test
+
 
     - name: Test
       run: go test -race -v -coverprofile=coverage.txt ./...

@@ -21,7 +21,6 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-
     - name: cfssl
       run: |
         wget https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl_1.5.0_linux_amd64
@@ -30,9 +29,6 @@ jobs:
         chmod +x cfssl_1.5.0_linux_amd64
         sudo mv cfssl_1.5.0_linux_amd64 /usr/local/bin/cfssl 
         sudo mv cfssljson_1.5.0_linux_amd64 /usr/local/bin/cfssljson
-        
-      
-
 
     - name: Get dependencies
       run: |
@@ -51,7 +47,6 @@ jobs:
         cd ./..
         sudo cp -r certs /certs
 
-
     - name: run etcd
       run: |
         docker run -d \
@@ -61,16 +56,13 @@ jobs:
            -v /certs:/certs \
            quay.io/mchirico/etcd:test
 
-
     - name: Test
       run: go test -race -v -coverprofile=coverage.txt ./...
-
   
     - name: Codecov Setup
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-
 
     - name: Codecov Run
       run: |

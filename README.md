@@ -1,4 +1,5 @@
 ![Go](https://github.com/mchirico/go.etcd/workflows/Go/badge.svg)
+[![codecov](https://codecov.io/gh/mchirico/go.etcd/branch/main/graph/badge.svg?token=1UpZxvESjW)](https://codecov.io/gh/mchirico/go.etcd)
 
 # go.etcd
 

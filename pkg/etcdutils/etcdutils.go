@@ -96,7 +96,11 @@ func (e ETC) PutWithLease(key string, value string, ttl int64) (*clientv3.PutRes
 	return pr, err
 }
 
-func (e ETC) Get(key string) (*clientv3.GetResponse, error) {
+func (e ETC) Get(key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
+	if opts != nil {
+		gr, err := e.kv.Get(e.ctx, key, opts...)
+		return gr, err
+	}
 	gr, err := e.kv.Get(e.ctx, key)
 	return gr, err
 }

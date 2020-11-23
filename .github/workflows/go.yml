@@ -26,6 +26,8 @@ jobs:
       run: |
         go get -u github.com/cloudflare/cfssl/cmd/cfssl
         cfssl
+      env:
+        GO111MODULE: on
 
 
 

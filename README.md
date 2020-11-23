@@ -7,6 +7,7 @@ export GO111MODULE=on
 go get github.com/mchirico/go.etcd
 ```
 
+## Sample Put and Get
 
 ```go
 package main
@@ -43,6 +44,8 @@ func main() {
 
 
 ```
+
+
 
 
 

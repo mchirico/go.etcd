@@ -122,4 +122,3 @@ func (e ETC) Txn() clientv3.Txn {
 	tx := e.kv.Txn(e.ctx)
 	return tx
 }
-

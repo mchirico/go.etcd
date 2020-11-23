@@ -22,9 +22,9 @@ tls: true
 `
 
 type T struct {
-	URL   string
+	URL     string
 	TestURL string `yaml:"testurl"`
-	Certs struct {
+	Certs   struct {
 		Directory string `yaml:"directory"`
 		Ca        string `yaml:"ca"`
 		Client    string `yaml:"client"`

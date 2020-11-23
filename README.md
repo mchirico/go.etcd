@@ -1,3 +1,5 @@
+![Go](https://github.com/mchirico/go.etcd/workflows/Go/badge.svg)
+
 # go.etcd
 
 ## Usage

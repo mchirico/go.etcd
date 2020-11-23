@@ -27,7 +27,7 @@ type ETC struct {
 	err      error
 }
 
-func NewETC(certsDir ...string) (ETC, func()) {
+func NewETC(options ...string) (ETC, func()) {
 	e := ETC{}
 	config, err := settings.ReadConfig()
 	if err != nil {
@@ -39,14 +39,16 @@ func NewETC(certsDir ...string) (ETC, func()) {
 		}
 	}
 
-	if certsDir == nil {
-		e.CertsDir = config.Certs.Directory
-	} else {
-		e.CertsDir = certsDir[0]
+	e.CertsDir = config.Certs.Directory
+	url := config.URL
+	if options != nil {
+		if options[0] == "test" {
+			url = config.TestURL
+		}
 	}
 
 	e.ctx, e.cancel, e.Cli, e.kv, e.err = e.setup(config.Certs.Client,
-		config.Certs.ClientKey, config.Certs.Ca)
+		config.Certs.ClientKey, config.Certs.Ca, url)
 
 	return e, e.cancel
 }
@@ -56,7 +58,7 @@ func (e ETC) Cancel() {
 	e.Cli.Close()
 }
 
-func (e ETC) setup(client, clientKey, ca string) (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
+func (e ETC) setup(client, clientKey, ca, url string) (context.Context, context.CancelFunc, *clientv3.Client, clientv3.KV, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
 
 	cert, err := tls.LoadX509KeyPair(e.CertsDir+"/"+client, e.CertsDir+"/"+clientKey)
@@ -76,7 +78,7 @@ func (e ETC) setup(client, clientKey, ca string) (context.Context, context.Cance
 
 	cli, err := clientv3.New(clientv3.Config{
 		DialTimeout: dialTimeout,
-		Endpoints:   []string{"etcd.cwxstat.io:2379"},
+		Endpoints:   []string{url},
 
 		TLS: tlsConfig,
 	})

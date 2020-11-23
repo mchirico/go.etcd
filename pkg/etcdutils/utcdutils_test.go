@@ -9,7 +9,7 @@ import (
 )
 
 func TestETC_Put(t *testing.T) {
-	e, cancel := NewETC()
+	e, cancel := NewETC("test")
 	defer cancel()
 
 	e.DeleteWithPrefix("/testing")
@@ -25,7 +25,7 @@ func TestETC_Put(t *testing.T) {
 }
 
 func TestETC_Delete(t *testing.T) {
-	e, cancel := NewETC()
+	e, cancel := NewETC("test")
 	defer cancel()
 
 	e.DeleteWithPrefix("/testing")
@@ -45,7 +45,7 @@ func TestETC_Delete(t *testing.T) {
 }
 
 func TestETC_GetWithPrefix(t *testing.T) {
-	e, cancel := NewETC()
+	e, cancel := NewETC("test")
 	defer cancel()
 
 	e.DeleteWithPrefix("/testing")
@@ -72,7 +72,7 @@ For this you neeed:
     "github.com/etcd-io/etcd/clientv3"
 */
 func TestETC_Txn(t *testing.T) {
-	e, cancel := NewETC()
+	e, cancel := NewETC("test")
 	defer cancel()
 
 	tx := e.Txn()
@@ -94,7 +94,7 @@ func TestETC_Txn(t *testing.T) {
 }
 
 func TestETC_Cli(t *testing.T) {
-	e, cancel := NewETC()
+	e, cancel := NewETC("test")
 	defer cancel()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

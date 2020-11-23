@@ -11,6 +11,7 @@ import (
 
 var data = `
 url: etcd.cwxstat.io:2379
+testurl: localhost:2379
 certs:
   directory: /certs
   ca: ca.pem
@@ -22,6 +23,7 @@ tls: true
 
 type T struct {
 	URL   string
+	TestURL string `yaml:"testurl"`
 	Certs struct {
 		Directory string `yaml:"directory"`
 		Ca        string `yaml:"ca"`

@@ -25,7 +25,7 @@ jobs:
     - name: cfssl
       run: |
         go get -u github.com/cloudflare/cfssl/cmd/cfssl
-        which cfssl
+        cfssl
 
 
 

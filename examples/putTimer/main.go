@@ -1,10 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"github.com/mchirico/go.etcd/pkg/etcdutils"
 	"log"
 	"time"
 )
+
+func Status() (string, error) {
+
+	e, cancel := etcdutils.NewETC()
+	defer cancel()
+
+	result, err := e.GetWithPrefix("gopi.service")
+
+	s := ""
+	for i, v := range result.Kvs {
+		s += fmt.Sprintf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
+	}
+	return s, err
+}
 
 func Update() {
 

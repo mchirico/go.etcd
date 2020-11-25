@@ -172,3 +172,29 @@ func TestETC_Page(t *testing.T) {
 	}
 
 }
+
+func TestETC_Options(t *testing.T) {
+	e, cancel := NewETC("test")
+	defer cancel()
+
+	//e.DeleteWithPrefix("key")
+
+	for i := 0; i < 20; i++ {
+		k := "key"
+		e.Put(k, strconv.Itoa(i))
+	}
+
+	opts := []clientv3.OpOption{
+		clientv3.WithRev(605),
+	}
+
+	gr, err := e.Get("key", opts...)
+	if err != nil {
+		return
+	}
+	fmt.Println("--- First page ---")
+	for _, item := range gr.Kvs {
+		fmt.Println(string(item.Key), string(item.Value))
+	}
+
+}

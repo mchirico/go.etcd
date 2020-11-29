@@ -175,6 +175,7 @@ func TestETC_Page(t *testing.T) {
 
 func TestETC_Options(t *testing.T) {
 	e, cancel := NewETC("test")
+
 	defer cancel()
 
 	//e.DeleteWithPrefix("key")
@@ -185,6 +186,7 @@ func TestETC_Options(t *testing.T) {
 	}
 
 	opts := []clientv3.OpOption{
+		//clientv3.AlarmMember{},
 		clientv3.WithRev(605),
 	}
 

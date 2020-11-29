@@ -25,15 +25,35 @@ type ETC struct {
 	err      error
 }
 
+func Server() settings.T {
+	t := settings.T{}
+	t.URL = "etcd.cwxstat.io:2379"
+	t.TestURL = "localhost:2379"
+	t.Certs.Directory = "/certs"
+	t.Certs.Ca = "ca.pem"
+	t.Certs.Client = "client.pem"
+	t.Certs.ClientKey = "client-key.pem"
+	return t
+}
+
 func NewETC(options ...string) (ETC, func()) {
 	e := ETC{}
-	config, err := settings.ReadConfig()
-	if err != nil {
-		log.Printf("You need a config. CREATING!")
-		settings.CreateDefault()
+	var config settings.T
+	var err error
+	if options != nil && options[0] == "server" {
+
+		config = Server()
+
+	} else {
+
 		config, err = settings.ReadConfig()
 		if err != nil {
-			log.Fatalf("NewETC: Can't read or create config\n")
+			log.Printf("You need a config. CREATING!")
+			settings.CreateDefault()
+			config, err = settings.ReadConfig()
+			if err != nil {
+				log.Fatalf("NewETC: Can't read or create config\n")
+			}
 		}
 	}
 

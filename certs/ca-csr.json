@@ -6,7 +6,9 @@
         "localhost",
         "127.0.0.1",
         "etcd.cwxstat.io",
-        "157.230.64.59"
+        "157.230.64.59",
+        "worker.cwxstat.io",
+        "34.70.152.25"
     ],
     "key": {
         "algo": "ecdsa",

@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	e, cancel := etcdutils.NewETC()
+	e, cancel := etcdutils.NewETC("test")
 	defer cancel()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

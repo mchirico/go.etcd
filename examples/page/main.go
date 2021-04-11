@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	e, cancel := etcdutils.NewETC()
+	e, cancel := etcdutils.NewETC("test")
 	defer cancel()
 
 	e.DeleteWithPrefix("key")

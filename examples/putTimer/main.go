@@ -9,7 +9,7 @@ import (
 
 func Status() (string, error) {
 
-	e, cancel := etcdutils.NewETC()
+	e, cancel := etcdutils.NewETC("test")
 	defer cancel()
 
 	result, err := e.GetWithPrefix("gopi.service")
@@ -23,7 +23,7 @@ func Status() (string, error) {
 
 func Update() {
 
-	e, cancel := etcdutils.NewETC()
+	e, cancel := etcdutils.NewETC("test")
 	defer cancel()
 
 	now := time.Now()

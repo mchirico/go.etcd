@@ -63,6 +63,8 @@ func TestETC_GetWithPrefix(t *testing.T) {
 	}
 
 	for i, v := range result.Kvs {
+		sv := fmt.Sprintf("%s", v.Value)
+		t.Logf("%s\n", sv)
 		t.Logf("result.Kvs[%d]: %s, ver: %d,  lease: %d\n", i, v.Value, v.Version, v.Lease)
 	}
 

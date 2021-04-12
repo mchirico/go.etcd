@@ -3,9 +3,12 @@
     "hosts": [
         "etcd.cwxstat.io",
         "etcd2.cwxstat.io",
+        "etcd2.cwxstat.io",	
         "157.230.64.59",
         "localhost",
-        "127.0.0.1"
+        "127.0.0.1",
+        "worker.cwxstat.io",
+        "34.70.152.25"	
     ],
     "key": {
         "algo": "ecdsa",

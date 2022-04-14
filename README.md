@@ -3,6 +3,9 @@
 
 # go.etcd
 
+
+This project is replaced by https://github.com/cwxstat/go.etcd
+
 ## Usage
 
 ```bash
